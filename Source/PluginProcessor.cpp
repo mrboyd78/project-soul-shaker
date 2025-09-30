@@ -1,38 +1,16 @@
 #include "PluginProcessor.h"
 #include "PluginEditor.h"
-#include "SynthSound.h"
 
 SOULShakerAudioProcessor::SOULShakerAudioProcessor()
     : apvts(*this, nullptr, "Parameters", createParameterLayout())
 {
-    synth.addSound(new SynthSound());
-    for (int i = 0; i < 5; ++i)
-    {
-        synth.addVoice(new SynthVoice(apvts));
-    }
 }
-
 SOULShakerAudioProcessor::~SOULShakerAudioProcessor() {}
 
-void SOULShakerAudioProcessor::prepareToPlay(double sampleRate, int samplesPerBlock)
-{
-    synth.setCurrentPlaybackSampleRate(sampleRate);
-
-    for (int i = 0; i < synth.getNumVoices(); ++i)
-    {
-        if (auto* voice = dynamic_cast<SynthVoice*>(synth.getVoice(i)))
-        {
-            voice->setCurrentPlaybackSampleRate(sampleRate);
-        }
-    }
-}
+void SOULShakerAudioProcessor::prepareToPlay(double, int) {}
 void SOULShakerAudioProcessor::releaseResources() {}
 
-void SOULShakerAudioProcessor::processBlock(juce::AudioBuffer<float>& buffer, juce::MidiBuffer& midiMessages)
-{
-    buffer.clear();
-    synth.renderNextBlock(buffer, midiMessages, 0, buffer.getNumSamples());
-}
+void SOULShakerAudioProcessor::processBlock(juce::AudioBuffer<float>&, juce::MidiBuffer&) {}
 
 juce::AudioProcessorEditor* SOULShakerAudioProcessor::createEditor() { return new SOULShakerAudioProcessorEditor(*this); }
 bool SOULShakerAudioProcessor::hasEditor() const { return true; }
@@ -68,33 +46,8 @@ juce::AudioProcessorValueTreeState::ParameterLayout SOULShakerAudioProcessor::cr
 {
     juce::AudioProcessorValueTreeState::ParameterLayout layout;
 
-    layout.add(std::make_unique<juce::AudioParameterChoice>("WAVEFORM", "Waveform",
-        juce::StringArray{ "Sine", "Saw", "Square", "Triangle" }, 0));
-
-    layout.add(std::make_unique<juce::AudioParameterFloat>("ATTACK", "Attack", 0.0f, 1.0f, 0.1f));
-    layout.add(std::make_unique<juce::AudioParameterFloat>("DECAY", "Decay", 0.0f, 1.0f, 0.1f));
-    layout.add(std::make_unique<juce::AudioParameterFloat>("SUSTAIN", "Sustain", 0.0f, 1.0f, 1.0f));
-    layout.add(std::make_unique<juce::AudioParameterFloat>("RELEASE", "Release", 0.0f, 3.0f, 0.4f));
+    layout.add(std::make_unique<juce::AudioParameterChoice>("STYLE", "Style",
+        juce::StringArray{ "Clean", "Vintage", "Warm", "Saturated", "Driven", "Crisp", "Edgy", "Fat" }, 0));
 
     return layout;
-}
-
-void SOULShakerAudioProcessor::randomizeParameters()
-{
-    juce::Random random;
-
-    if (auto* waveformParam = dynamic_cast<juce::AudioParameterChoice*>(apvts.getParameter("WAVEFORM")))
-    {
-        int numChoices = waveformParam->choices.size();
-        if (numChoices > 0)
-        {
-            int randomChoice = random.nextInt(numChoices);
-            waveformParam->setValueNotifyingHost((float)randomChoice / (float)(numChoices - 1));
-        }
-    }
-
-    apvts.getParameter("ATTACK")->setValueNotifyingHost(random.nextFloat());
-    apvts.getParameter("DECAY")->setValueNotifyingHost(random.nextFloat());
-    apvts.getParameter("SUSTAIN")->setValueNotifyingHost(random.nextFloat());
-    apvts.getParameter("RELEASE")->setValueNotifyingHost(random.nextFloat());
 }

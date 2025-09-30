@@ -15,16 +15,8 @@ public:
 private:
     SOULShakerAudioProcessor& processor;
 
-    juce::ComboBox waveformComboBox;
-    std::unique_ptr<juce::AudioProcessorValueTreeState::ComboBoxAttachment> waveformAttachment;
-
-    juce::Slider attackSlider, decaySlider, sustainSlider, releaseSlider;
-    std::unique_ptr<juce::AudioProcessorValueTreeState::SliderAttachment> attackAttachment;
-    std::unique_ptr<juce::AudioProcessorValueTreeState::SliderAttachment> decayAttachment;
-    std::unique_ptr<juce::AudioProcessorValueTreeState::SliderAttachment> sustainAttachment;
-    std::unique_ptr<juce::AudioProcessorValueTreeState::SliderAttachment> releaseAttachment;
-
-    juce::TextButton shakerButton{ "Shaker" };
+    juce::Slider styleSlider;
+    std::unique_ptr<juce::AudioProcessorValueTreeState::SliderAttachment> styleAttachment;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(SOULShakerAudioProcessorEditor)
 };
