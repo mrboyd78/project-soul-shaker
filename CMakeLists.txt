@@ -25,7 +25,7 @@ if(NOT EXISTS "${CHOWDSP_WDF_HEADER}")
        "${CHOWDSP_WDF_HEADER}"
        SHOW_PROGRESS
        STATUS _chowdsp_wdf_download_status
-       LOG)
+       LOG _chowdsp_wdf_log)
   list(GET _chowdsp_wdf_download_status 0 _chowdsp_wdf_code)
   list(GET _chowdsp_wdf_download_status 1 _chowdsp_wdf_msg)
   if(NOT _chowdsp_wdf_code EQUAL 0)
