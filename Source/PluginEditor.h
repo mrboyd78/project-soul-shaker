@@ -15,8 +15,12 @@ public:
 private:
     SOULShakerAudioProcessor& processor;
 
-    juce::Slider styleSlider;
-    std::unique_ptr<juce::AudioProcessorValueTreeState::SliderAttachment> styleAttachment;
+    juce::ComboBox waveformComboBox;
+    std::unique_ptr<juce::AudioProcessorValueTreeState::ComboBoxAttachment> waveformAttachment;
+
+    juce::Slider filterCutoffSlider, filterResonanceSlider;
+    std::unique_ptr<juce::AudioProcessorValueTreeState::SliderAttachment> filterCutoffAttachment;
+    std::unique_ptr<juce::AudioProcessorValueTreeState::SliderAttachment> filterResonanceAttachment;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(SOULShakerAudioProcessorEditor)
 };

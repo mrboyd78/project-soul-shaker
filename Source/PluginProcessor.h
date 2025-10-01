@@ -1,6 +1,9 @@
 #pragma once
 
 #include <juce_audio_processors/juce_audio_processors.h>
+#include "third_party/TransistorFilterWrapper.h"
+
+class SynthVoice;
 
 class SOULShakerAudioProcessor : public juce::AudioProcessor
 {
@@ -34,6 +37,9 @@ public:
 
 private:
     juce::AudioProcessorValueTreeState::ParameterLayout createParameterLayout();
+
+    juce::Synthesiser synth;
+    tfw::TransistorFilterWrapper transistorFilter;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(SOULShakerAudioProcessor)
 };
